@@ -2,7 +2,7 @@
 <Context path="/JDBCDemo">
     <Resource
         name="jdbc/notesdb"
-        url="jdbc:mysql://localhost:3306/notesdb" 
+        url="jdbc:mysql://localhost:3306/notesdb"
         username="root"
         password="password"
         maxActive="100"

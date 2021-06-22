@@ -14,7 +14,7 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         // automatically log in as "anne"
-        session.setAttribute("email", "cprg352+anne@gmail.com");
+        session.setAttribute("email", "sait.cprg.352+anne@gmail.com");
         response.sendRedirect("notes");
     }
 

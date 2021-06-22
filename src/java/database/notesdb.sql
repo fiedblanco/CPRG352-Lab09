@@ -28,8 +28,8 @@ INSERT INTO `user` (`email`,`active`,`first_name`,`last_name`,`password`)
     ('sait.cprg.352+anne@gmail.com', true, 'Anne','Teak', 'password');
     
 
-INSERT INTO `note` (`Title`, `Contents`, `Owner`)
+INSERT INTO `note` (`title`, `contents`, `owner`)
     VALUES
-    ('Quote #1', 'Writing is nature''s way of letting you know how sloppy your thinking is.', 'cprg352+anne@gmail.com'),
-    ('Another quote', '"Java is to JavaScript as ham is to hamster." -  Jeremy Keith', 'cprg352+anne@gmail.com'),
-    ('Matilda''s Note', 'Anne should not see this note. She stole my broccoli casserole recipe 8 years ago and claimed it was hers.', 'cprg352+matilda@gmail.com');
+    ('Quote #1', 'Writing is nature''s way of letting you know how sloppy your thinking is.', 'sait.cprg.352+anne@gmail.com'),
+    ('Another quote', '"Java is to JavaScript as ham is to hamster." -  Jeremy Keith', 'sait.cprg.352+anne@gmail.com'),
+    ('Matilda''s Note', 'Anne should not see this note. She stole my broccoli casserole recipe 8 years ago and claimed it was hers.', 'sait.cprg.352+matilda@gmail.com');
