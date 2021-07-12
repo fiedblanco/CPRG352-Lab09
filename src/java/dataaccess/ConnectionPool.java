@@ -12,7 +12,7 @@ public class ConnectionPool {
     private ConnectionPool() {
         try {
             InitialContext ic = new InitialContext();
-            dataSource = (DataSource) ic.lookup("java:/comp/env/jdbc/notesdb");
+            dataSource = (DataSource) ic.lookup("java:/comp/env/jdbc/userdb");
             // "jdbc/notesdb" this must match your resource name in context.xml
         } catch (NamingException e) {
             System.out.println(e);
