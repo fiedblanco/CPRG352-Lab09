@@ -27,20 +27,18 @@ import services.UserServices;
  */
 public class UserServlet extends HttpServlet {
 
-    
-    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-      RoleService rs = new RoleService();
-         try {
+        RoleService rs = new RoleService();
+        try {
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute("email");
-           
+
             List<User> users = rs.getAll(email);
-              request.setAttribute("userAdded", true);
+            request.setAttribute("userAdded", true);
             request.setAttribute("usersInList", users);
-           
+
         } catch (Exception ex) {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
             request.setAttribute("message", "error");
@@ -53,21 +51,21 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         RoleService rs = new RoleService();
-         try {
+        try {
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute("email");
-           
+
             List<User> users = rs.getAll(email);
-              request.setAttribute("userAdded", true);
+            request.setAttribute("userAdded", true);
             request.setAttribute("usersInList", users);
-           
+
         } catch (Exception ex) {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
             request.setAttribute("message", "error");
         }
-        
+
         UserServices us = new UserServices();
         String action = request.getParameter("action");
 
@@ -76,33 +74,64 @@ public class UserServlet extends HttpServlet {
         String lastname = request.getParameter("lname");
         String password = request.getParameter("pass");
         String roles = request.getParameter("roles");
-          Boolean active = true;
-          
-          String emailE = request.getParameter("emailE");
+        Boolean active = true;
+
+        String emailE = request.getParameter("emailE");
         String firstnameE = request.getParameter("fnameE");
         String lastnameE = request.getParameter("lnameE");
         String passwordE = request.getParameter("passwordE");
         String rolesE = request.getParameter("rolesE");
-          
-        int roleNum=  Integer.parseInt(roles);
-      
-       
+
+        int roleNum = Integer.parseInt(roles);
+
         try {
             switch (action) {
                 case "Add":
                     User user = new User(email, firstname, lastname, password, active, roleNum);
                     us.insert(email, firstname, lastname, password, active, roleNum);
-                           getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
+
+                    try {
+                        HttpSession session = request.getSession();
+
+                        List<User> users = rs.getAll(email);
+                        request.setAttribute("userAdded", true);
+                        request.setAttribute("usersInList", users);
+
+                    } catch (Exception ex) {
+                        Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+                        request.setAttribute("message", "error");
+                    }
 
                     break;
                 case "Edit":
                     us.update(emailE, firstnameE, lastnameE, passwordE, active, roleNum);
-                           getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
+                   
+                    try {
+                        HttpSession session = request.getSession();
 
+                        List<User> users = rs.getAll(email);
+                        request.setAttribute("userAdded", true);
+                        request.setAttribute("usersInList", users);
+
+                    } catch (Exception ex) {
+                        Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+                        request.setAttribute("message", "error");
+                    }
+                    
                     break;
                 case "Delete":
                     us.delete(emailE);
-                            getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
+                     try {
+                      HttpSession session = request.getSession();
+
+                        List<User> users = rs.getAll(email);
+                        request.setAttribute("userAdded", true);
+                        request.setAttribute("usersInList", users);
+
+                    } catch (Exception ex) {
+                        Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
+                        request.setAttribute("message", "error");
+                    }
 
             }
             request.setAttribute("message", action);
@@ -110,13 +139,13 @@ public class UserServlet extends HttpServlet {
             Logger.getLogger(UserServlet.class.getName()).log(Level.SEVERE, null, ex);
             request.setAttribute("message", "error");
         }
+
         getServletContext().getRequestDispatcher("/WEB-INF/users.jsp").forward(request, response);
 
     }
 
-
-@Override
-        public String getServletInfo() {
+    @Override
+    public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 
