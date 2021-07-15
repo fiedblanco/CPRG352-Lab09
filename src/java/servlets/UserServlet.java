@@ -35,6 +35,7 @@ public class UserServlet extends HttpServlet {
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute("email");
 
+            
             List<User> users = rs.getAll(email);
             request.setAttribute("userAdded", true);
             request.setAttribute("usersInList", users);
@@ -87,8 +88,16 @@ public class UserServlet extends HttpServlet {
         try {
             switch (action) {
                 case "Add":
-                    User user = new User(email, firstname, lastname, password, active, roleNum);
-                    us.insert(email, firstname, lastname, password, active, roleNum);
+                    
+                 // User u = new User();
+                 
+                  
+                  
+                  
+                  
+                 //  User user = new User(email, firstname, lastname, password, active, roleNum);
+                    
+                    us.insert(email, active, firstname, lastname, password, roleNum);
 
                     try {
                         HttpSession session = request.getSession();
@@ -104,7 +113,7 @@ public class UserServlet extends HttpServlet {
 
                     break;
                 case "Edit":
-                    us.update(emailE, firstnameE, lastnameE, passwordE, active, roleNum);
+                    us.update(emailE, active, firstnameE, lastnameE, passwordE,  roleNum);
                    
                     try {
                         HttpSession session = request.getSession();

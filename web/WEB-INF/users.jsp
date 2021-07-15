@@ -33,9 +33,9 @@
                 <br>
                 <label>Role</label>
                 <select name="roles">
-                    <option value="1">System Admin</option>
-                    <option value="2">Regular User</option>
-                    <option value="3">Company Admin</option>
+                    <option value="0">System Admin</option>
+                    <option value="1">Regular User</option>
+                    <option value="2">Company Admin</option>
                 </select>
                 <br>
                 <input type="submit" value="Add" name="action">
@@ -59,8 +59,8 @@
                           <c:forEach var="user" items="${usersInList}">
                         <tr>
                             <td>${user.email}</td>
-                            <td>${user.firstname}</td>
-                            <td>${user.lastname}</td>
+                            <td>${user.firstName}</td>
+                            <td>${user.lastName}</td>
 
                            
                         </tr>

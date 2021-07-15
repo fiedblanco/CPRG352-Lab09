@@ -10,6 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import models.Role;
 import models.User;
 
 /**
@@ -17,69 +20,81 @@ import models.User;
  * @author 854276
  */
 public class UserDB {
-    
-  
-      
-        public void insert(User user) throws Exception {
-        ConnectionPool cp = ConnectionPool.getInstance();
-        Connection con = cp.getConnection();
-        PreparedStatement ps = null;
-        String sql = "INSERT INTO user (email,active,first_name,last_name,password,role) VALUES (?, ?, ?, ?, ?, ?)";
+
+    public void insert(User user) throws Exception {
+
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
 
         try {
-            ps = con.prepareStatement(sql);
-            ps.setString(1, user.getEmail());
-            ps.setBoolean(2, user.getActive());
-            ps.setString(3, user.getFirstname());
-            ps.setString(4, user.getLastname());
-            ps.setString(5, user.getPassword());
-            ps.setInt(6, user.getRoleNum());
-            ps.executeUpdate();
-        } catch(SQLException ex) {
-            System.out.println(ex);
-        }finally {
-            DBUtil.closePreparedStatement(ps);
-            cp.freeConnection(con);
+            Role role = new Role();
+            role = user.getRole();
+            role.getUserList().add(user);
+            trans.begin();
+            em.persist(user);
+            em.merge(role);
+            trans.commit();
+        } catch (Exception ex) {
+            trans.rollback();
+        } finally {
+            em.close();
         }
+
     }
 
     public void update(User user) throws Exception {
-        ConnectionPool cp = ConnectionPool.getInstance();
-        Connection con = cp.getConnection();
-        PreparedStatement ps = null;
-        String sql = "UPDATE user SET active=?, first_name=?, last_name=?, password=?, role=?  WHERE email=?";
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
 
         try {
-            ps = con.prepareStatement(sql);
-            
-            ps.setBoolean(1, user.getActive());
-            ps.setString(2, user.getFirstname());
-            ps.setString(3, user.getLastname());
-            ps.setString(4, user.getPassword());
-            ps.setInt(5, user.getRoleNum());
-            ps.setString(6, user.getEmail());
-            ps.executeUpdate();
+            trans.begin();
+            em.merge(user);
+            trans.commit();
+        } catch (Exception ex) {
+            trans.rollback();
         } finally {
-            DBUtil.closePreparedStatement(ps);
-            cp.freeConnection(con);
+            em.close();
         }
     }
 
     public void delete(User user) throws Exception {
-        ConnectionPool cp = ConnectionPool.getInstance();
-        Connection con = cp.getConnection();
-        PreparedStatement ps = null;
-        String sql = "DELETE FROM user WHERE email=?";
-
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
         try {
-            ps = con.prepareStatement(sql);
-            ps.setString(1, user.getEmail());
-            ps.executeUpdate();
+//            Employee employee = em.find(Employee.class, 1);
+//            em.getTransaction().begin();
+//            em.remove(employee);
+//            em.getTransaction().commit();
+
+            User userDel = em.find(User.class, user.getEmail());
+            em.getTransaction().begin();
+            em.remove(userDel);
+            trans.commit();
+//            role = user.getRole();
+//            role.getUserList().remove(user);
+//            trans.begin();
+//            em.remove(em.merge(user));
+//            em.merge(user);
+//            trans.commit();
+        } catch (Exception ex) {
+            trans.rollback();
+            System.out.println(ex);
         } finally {
-            DBUtil.closePreparedStatement(ps);
-            cp.freeConnection(con);
+            em.close();
         }
     }
 
-}
+    public User get(String email) throws Exception {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
 
+        try {
+            User user = em.find(User.class, email);
+            // System.out.println("first name: " + note.getOwner().getFirstName());
+            // get all notes of the same owner as that note
+            // List<Note> notes = note.getOwner().getNoteList();
+            return user;
+        } finally {
+            em.close();
+        }
+    }
+}
